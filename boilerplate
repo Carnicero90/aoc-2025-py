@@ -1,0 +1,39 @@
+#! /usr/bin/env sh
+
+if [ -n "$1" ]; then
+  DAY="$1"
+else
+  DAY=$(date +%d)
+fi
+
+mkdir -p "day$DAY"
+
+touch "day$DAY/ex1"
+
+COOKIE=$(security find-generic-password -s "adventofcode-session" -w)
+
+STATUS=$(curl -s -w "%{http_code}" -o "day$DAY/in" -b"session=$COOKIE" "https://adventofcode.com/2025/day/${DAY#0}/input")
+
+if [ "$STATUS" -ne 200 ]; then
+    printf "\033[41;37;1m errore curl: $STATUS \033[0m\n"
+    exit 1
+fi
+
+MAIN="day$DAY/main.py"
+
+if [ -f "$MAIN" ]; then
+    while true; do
+      printf "Sovrascrivere main.py? [y/N]: "
+      IFS= read -r REPLY
+      case "$REPLY" in
+        [yY]|[yY][eE][sS])
+        break
+        ;;
+      ""|[nN]|[nN][oO])
+        exit 0
+        ;;
+      esac
+    done
+fi
+
+cp template.py "$MAIN"
