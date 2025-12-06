@@ -1,5 +1,5 @@
-**/in
-**/ex*
 .envrc
 shell.nix
 .direnv
+day*/**
+!day*/main.py
