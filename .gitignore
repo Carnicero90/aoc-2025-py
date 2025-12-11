@@ -2,4 +2,5 @@
 shell.nix
 .direnv
 day*/**
-!day*/main.py
+!day*/**.py
+__pycache__
